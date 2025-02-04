@@ -1,4 +1,8 @@
-.register-container {
+.error-message {
+  color: red;
+  margin-bottom: 15px;
+}
+.login-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,25 +11,25 @@
   padding: 20px;
 }
 
-.register-card {
+.login-card {
   background: white;
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   width: 100%;
-  max-width: 500px;
+  max-width: 400px;
   animation: fadeIn 0.5s ease-in-out;
 }
 
-
-.register-title {
+.login-title {
   font-size: 2rem;
   color: #333;
   text-align: center;
   margin-bottom: 1.5rem;
 }
 
-.register-form {
+
+.login-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -55,7 +59,7 @@
   outline: none;
 }
 
-.register-button {
+.login-button {
   padding: 0.8rem;
   background: #6a11cb;
   color: white;
@@ -66,11 +70,11 @@
   transition: background 0.3s ease;
 }
 
-.register-button:hover {
+.login-button:hover {
   background: #2575fc;
 }
 
-.register-button:disabled {
+.login-button:disabled {
   background: #ccc;
   cursor: not-allowed;
 }
@@ -81,28 +85,28 @@
   margin-top: 0.2rem;
 }
 
-.profile-preview {
-  margin-top: 0.5rem;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+.global-error {
+  text-align: center;
+  margin-top: 1rem;
 }
 
-.login-link {
+.signup-link {
   text-align: center;
   margin-top: 1.5rem;
   font-size: 0.9rem;
   color: #555;
 }
 
-.login-link a {
+.signup-link a {
   color: #6a11cb;
   text-decoration: none;
   font-weight: bold;
 }
 
-.login-link a:hover {
+.signup-link a:hover {
   text-decoration: underline;
 }
+
 
 @keyframes fadeIn {
   from {

@@ -29,7 +29,7 @@ export class RegisterComponent {
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       birthDate: ['', Validators.required],
       profilePhoto: [null],
-      role: ['user']
+      role: ['particulier'],
     });
   }
 
