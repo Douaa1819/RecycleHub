@@ -72,4 +72,12 @@ export class IndexedDbService {
   async getCollectRequests() {
     return this.db.getAll('collectRequests');
   }
+
+  async updateUser(user: any) {
+    return this.db.put('users', user);
+  }
+
+  async deleteUser(email: string) {
+    return this.db.delete('users', email);
+  }
 }
