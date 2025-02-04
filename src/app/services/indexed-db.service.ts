@@ -13,6 +13,7 @@ interface MyDB extends DBSchema {
       phone: string;
       birthDate: string;
       profilePhoto?: string;
+      role: 'particulier' | 'collector';
     };
   };
   collectRequests: {
@@ -62,6 +63,7 @@ export class IndexedDbService {
   async getUser(email: string) {
     return this.db.get('users', email);
   }
+
 
   async addCollectRequest(request: any) {
     return this.db.add('collectRequests', request);
