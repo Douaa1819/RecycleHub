@@ -80,4 +80,5 @@ export class IndexedDbService {
   async deleteUser(email: string) {
     return this.db.delete('users', email);
   }
+  
 }

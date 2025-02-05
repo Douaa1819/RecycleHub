@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { IndexedDbService } from '../services/indexed-db.service';
+import { Store } from '@ngrx/store';
+import { login } from '../state/user/user.actions';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { selectUser } from '../state/user/user.selectors';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +19,7 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private indexedDbService: IndexedDbService,
+    private store: Store,
     private router: Router
   ) {
     this.loginForm = this.fb.group({
@@ -26,26 +28,20 @@ export class LoginComponent {
     });
   }
 
-  async onSubmit() {
+  onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-
-      try {
-        const user = await this.indexedDbService.getUser(email);
-
-        if (user && user.password === password) {
-
-          alert('Connexion réussie !');
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.router.navigate([user.role === 'collector' ? '/collector-dashboard' : '/particulier-dashboard']);        } else {
-          this.errorMessage = 'Email ou mot de passe incorrect.';
-        }
-      } catch (error) {
-        console.error('Erreur lors de la connexion :', error);
-        this.errorMessage = 'Une erreur est survenue lors de la connexion.';
-      }
+      this.store.dispatch(login({ email, password }));
     } else {
       this.errorMessage = 'Veuillez remplir tous les champs obligatoires.';
     }
+  }
+
+  ngOnInit() {
+    this.store.select(selectUser).subscribe((user) => {
+      if (user) {
+        this.router.navigate([user.role === 'collector' ? '/collector-dashboard' : '/particulier-dashboard']);
+      }
+    });
   }
 }
