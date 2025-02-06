@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './register/register.component';
 import { ParticulierDashboardComponent} from './particulier-dashboard/particulier-dashboard.component';
 import { CollectorDashboardComponent } from './collector-dashboard/collector-dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
+import { CollectRequestComponent } from './collect-request/collect-request.component';
 export const routes: Routes = [
 
   { path: 'login', component: LoginComponent },

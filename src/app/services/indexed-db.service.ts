@@ -86,4 +86,4 @@ export class IndexedDbService {
     return allRequests.filter((req) => req.userId === userId && req.status === 'En attente');
   }
 
-  
+}
