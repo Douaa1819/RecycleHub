@@ -34,10 +34,10 @@ export class LoginComponent {
         const user = await this.indexedDbService.getUser(email);
 
         if (user && user.password === password) {
-
           alert('Connexion réussie !');
           localStorage.setItem('currentUser', JSON.stringify(user));
-          this.router.navigate([user.role === 'collector' ? '/collector-dashboard' : '/particulier-dashboard']);        } else {
+          this.router.navigate([user.role === 'collector' ? '/collector-dashboard' : '/particulier-dashboard']);
+        } else {
           this.errorMessage = 'Email ou mot de passe incorrect.';
         }
       } catch (error) {

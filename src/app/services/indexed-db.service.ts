@@ -80,4 +80,12 @@ export class IndexedDbService {
   async deleteUser(email: string) {
     return this.db.delete('users', email);
   }
+
+  async getPendingRequests(userId: string) {
+    const allRequests = await this.db.getAll('collectRequests');
+    return allRequests.filter((req) => req.userId === userId && req.status === 'En attente');
+  }
+
+  
+
 }
