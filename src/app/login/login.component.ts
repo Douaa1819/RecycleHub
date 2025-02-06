@@ -31,7 +31,6 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      this.store.dispatch(login({ email, password }));
     } else {
       this.errorMessage = 'Veuillez remplir tous les champs obligatoires.';
     }
