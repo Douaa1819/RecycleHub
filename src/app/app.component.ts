@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-
+import { RouterOutlet,Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
@@ -9,4 +8,11 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'RecycleHub';
+
+  constructor(private router: Router) {}
+
+  logout() {
+    localStorage.removeItem('currentUser');
+    this.router.navigate(['/login']); 
+  }
 }

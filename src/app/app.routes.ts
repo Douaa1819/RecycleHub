@@ -7,12 +7,13 @@ import { ProfileComponent } from './profile/profile.component';
 import { CollectRequestComponent } from './collect-request/collect-request.component';
 import { UserRequestsComponent } from './user-requests/user-requests.component';
 import { EditRequestComponent } from './edit-request/edit-request.component';
+import { LogoutComponent } from './logout/logout.component';
 export const routes: Routes = [
 
   { path: 'login', component: LoginComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'register', component: RegisterComponent },
-
+  { path: 'logout', component: LogoutComponent },
   { path: 'collect-request', component: CollectRequestComponent },
   { path: 'collect-request-list',component: UserRequestsComponent},
   { path: 'edit-request/:id', component: EditRequestComponent },

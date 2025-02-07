@@ -14,6 +14,19 @@ import { Component } from '@angular/core';
 export class RegisterComponent {
   isSubmitting = false;
   registerForm: FormGroup;
+  cities: string[] = [
+    'Casablanca',
+    'Rabat',
+    'Safi',
+    'Marrakech',
+    'Fès',
+    'Tangier',
+    'Agadir',
+    'Meknès',
+    'Oujda',
+    'Tétouan',
+    'Essaouira'
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -28,6 +41,7 @@ export class RegisterComponent {
       address: ['', Validators.required],
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       birthDate: ['', Validators.required],
+      city: ['', Validators.required],
       profilePhoto: [null],
       role: ['particulier'],
     });
