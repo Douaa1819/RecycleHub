@@ -70,7 +70,7 @@ export class CollectRequestComponent {
       try {
         await this.indexedDbService.addCollectRequest(request);
         alert('Demande de collecte soumise avec succès !');
-        this.router.navigate(['/user-dashboard']);
+        this.router.navigate(['/particulier-dashboard']);
       } catch (error) {
         console.error('Erreur lors de la soumission de la demande :', error);
         this.errorMessage = 'Une erreur est survenue lors de la soumission de la demande.';

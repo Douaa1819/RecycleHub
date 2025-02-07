@@ -86,6 +86,44 @@ export class IndexedDbService {
     return allRequests.filter((req) => req.userId === userId && req.status === 'En attente');
   }
 
-  
+  async updateCollectRequest(id: number, data: Partial<MyDB['collectRequests']['value']>) {
+    console.log(`Mise à jour de la demande ID: ${id}`, data);
+    if (!this.db) {
+      await this.initDB();
+    }
+    const existingRequest = await this.db.get('collectRequests', id);
+    if (!existingRequest) {
+      console.error(`Impossible de mettre à jour : la requête avec l'ID ${id} n'existe pas.`);
+      return;
+    }
+
+    // Fusionner les anciennes données avec les nouvelles
+    const updatedRequest = { ...existingRequest, ...data };
+
+    return this.db.put('collectRequests', updatedRequest);
+  }
+
+
+
+  async deleteCollectRequest(id: number) {
+    return this.db.delete('collectRequests', id);
+  }
+  async getCollectRequest(id: number) {
+    return this.db.get('collectRequests', id);
+  }
+
+  async getUserRequests(userId: string) {
+    console.log('IndexedDB Instance:', this.db);
+    if (!this.db) {
+      console.error('IndexedDB n\'est pas initialisé !');
+      await this.initDB();
+      // return [];
+    }
+
+    const allRequests = await this.db.getAll('collectRequests');
+    console.log('Toutes les requêtes:', allRequests);
+    return allRequests.filter((req) => req.userId === userId);
+  }
+
 
 }

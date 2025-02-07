@@ -5,12 +5,17 @@ import { ParticulierDashboardComponent} from './particulier-dashboard/particulie
 import { CollectorDashboardComponent } from './collector-dashboard/collector-dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CollectRequestComponent } from './collect-request/collect-request.component';
+import { UserRequestsComponent } from './user-requests/user-requests.component';
+import { EditRequestComponent } from './edit-request/edit-request.component';
 export const routes: Routes = [
 
   { path: 'login', component: LoginComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'register', component: RegisterComponent },
+
   { path: 'collect-request', component: CollectRequestComponent },
-  { path: 'particulier-dashboard', component: ParticulierDashboardComponent},
+  { path: 'collect-request-list',component: UserRequestsComponent},
+  { path: 'edit-request/:id', component: EditRequestComponent },
+    { path: 'particulier-dashboard', component: ParticulierDashboardComponent},
   { path: 'collector-dashboard', component: CollectorDashboardComponent},
 ];

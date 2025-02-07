@@ -1,0 +1,34 @@
+<div class="container">
+  <h2>Mes Demandes de Collecte</h2>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Types de déchets</th>
+        <th>Poids estimé (g)</th>
+        <th>Adresse</th>
+        <th>Date</th>
+        <th>Créneau horaire</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let request of requests">
+        <td>{{ request.wasteTypes.join(', ') }}</td>
+        <td>{{ request.estimatedWeight }}</td>
+        <td>{{ request.address }}</td>
+        <td>{{ request.date }}</td>
+        <td>{{ request.timeSlot }}</td>
+        <td>{{ request.status }}</td>
+        <td>
+          <button *ngIf="request.status === 'En attente'" (click)="editRequest(request.id)">Modifier</button>
+          <button *ngIf="request.status === 'En attente'" (click)="deleteRequest(request.id)">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="requests.length === 0">Aucune demande de collecte trouvée.</p>
+</div>
