@@ -16,6 +16,20 @@ export class CollectRequestComponent {
   isSubmitting = false;
   errorMessage: string | null = null;
 
+  city: string[] = [
+    'Casablanca',
+    'Rabat',
+    'Safi',
+    'Marrakech',
+    'Fès',
+    'Tangier',
+    'Agadir',
+    'Meknès',
+    'Oujda',
+    'Tétouan',
+    'Essaouira'
+  ];
+
   constructor(
     private fb: FormBuilder,
     private indexedDbService: IndexedDbService,
@@ -27,6 +41,7 @@ export class CollectRequestComponent {
       estimatedWeight: ['', [Validators.required, Validators.min(1000)]],
       address: ['', Validators.required],
       date: ['', Validators.required],
+      city: ['', Validators.required],
       timeSlot: ['', [Validators.required, this.validateTimeSlot]],
       notes: [''],
     });

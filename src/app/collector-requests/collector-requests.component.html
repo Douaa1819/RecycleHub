@@ -1,0 +1,53 @@
+<div class="container">
+  <h2>Demandes de Collecte Disponibles</h2>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Types de déchets</th>
+        <th>Poids estimé (g)</th>
+        <th>Adresse</th>
+        <th>Ville</th>
+        <th>Date</th>
+        <th>Créneau horaire</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let request of requests">
+        <td>
+          {{ request.wasteTypes ? request.wasteTypes.join(", ") : "Non spécifié" }}
+        </td>
+        <td>{{ request.estimatedWeight }}</td>
+        <td>{{ request.address }}</td>
+        <td>{{ request.city }}</td>
+        <td>{{ request.date }}</td>
+        <td>{{ request.timeSlot }}</td>
+        <td>{{ request.status }}</td>
+        <td>
+          <button
+            *ngIf="request.status === 'En attente'"
+            (click)="acceptRequest(request.id)"
+          >
+            Accepter
+          </button>
+          <button
+            *ngIf="request.status === 'Occupée'"
+            (click)="validateRequest(request.id)"
+          >
+            Valider
+          </button>
+          <button
+            *ngIf="request.status === 'Occupée'"
+            (click)="rejectRequest(request.id)"
+          >
+            Rejeter
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
