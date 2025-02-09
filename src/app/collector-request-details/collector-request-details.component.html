@@ -1,0 +1,32 @@
+  <div class="container">
+    <h2>Détails de la demande</h2>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="request" class="request-details">
+      <p>
+        <strong>Types de déchets :</strong>
+        {{ request.wasteTypes ? request.wasteTypes.join(", ") : "Non spécifié" }}
+      </p>
+      <p><strong>Poids estimé :</strong> {{ request.estimatedWeight }}g</p>
+      <p><strong>Adresse :</strong> {{ request.address }}</p>
+      <p><strong>Ville :</strong> {{ request.city }}</p>
+      <p><strong>Date :</strong> {{ request.date }}</p>
+      <p><strong>Créneau horaire :</strong> {{ request.timeSlot }}</p>
+      <p><strong>Statut :</strong> {{ request.status }}</p>
+
+      <label for="actualWeight">Poids réel (g) :</label>
+      <input type="number" [(ngModel)]="actualWeight" id="actualWeight" required />
+
+      <p><strong>Points attribués :</strong> {{ request.points }}</p>
+
+      <label for="photos">Ajouter une photo (optionnel) :</label>
+      <input type="file" (change)="onFileChange($event)" />
+
+      <button (click)="onValidateCollecte(request.id)" class="btn btn-success">Valider la collecte</button>
+    </div>
+
+    <button (click)="goBack()" class="btn-back">Retour</button>
+  </div>

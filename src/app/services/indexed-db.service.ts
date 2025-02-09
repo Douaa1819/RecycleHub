@@ -9,6 +9,7 @@ interface MyDB extends DBSchema {
       password: string;
       firstName: string;
       lastName: string;
+      convertiblePoints?: number;
       address: string;
       phone: string;
       city: string;
@@ -22,13 +23,15 @@ interface MyDB extends DBSchema {
     value: {
       id: number;
       userId: string;
-      wasteType: string[];
+      wasteTypes: string[];
       photos?: string[];
+      actualWeight?: number;
       estimatedWeight: number;
       address: string;
       city: string;
       date: string;
       timeSlot: string;
+      points: number;
       notes?: string;
       status: 'En attente' | 'Occupée' | 'En cours' | 'Validée' | 'Rejetée';
     };
@@ -73,14 +76,48 @@ export class IndexedDbService {
     return db.get('users', email);
   }
 
+
   async addCollectRequest(request: any) {
     const db = await this.getDB();
-    return db.add('collectRequests', request);
+    const tx = db.transaction('collectRequests', 'readwrite');
+    const store = tx.objectStore('collectRequests');
+    await store.add({ ...request, actualWeight: request.actualWeight || null });
+    await tx.done;
   }
 
   async getCollectRequests() {
     const db = await this.getDB();
     return db.getAll('collectRequests');
+  }
+
+
+  calculatePoints(wasteTypes: string[], estimatedWeight: number, actualWeight: number): number {
+    const wastePoints: { [key: string]: number } = {
+      'plastique': 2,
+      'verre': 1,
+      'papier': 1,
+      'métal': 5
+    };
+
+    let totalPoints = 0;
+    wasteTypes.forEach(type => {
+      if (wastePoints[type]) {
+        totalPoints += wastePoints[type] * (actualWeight / 1000);  // Conversion des grammes en kilogrammes
+      }
+    });
+
+    if (wasteTypes.length > 1) {
+      totalPoints /= wasteTypes.length;
+    }
+
+    const weightDifference = Math.abs(estimatedWeight - actualWeight);
+    totalPoints -= weightDifference / 10;
+
+    if (totalPoints < 0) {
+      totalPoints = 0;
+    }
+
+    return totalPoints;
   }
 
   async updateUser(user: any) {
@@ -98,6 +135,38 @@ export class IndexedDbService {
     const allRequests = await db.getAll('collectRequests');
     return allRequests.filter((req) => req.userId === userId && req.status === 'En attente');
   }
+
+  async updateCollectorPoints(collectorId: string, points: number) {
+    const db = await this.getDB();
+    const collector = await db.get('users', collectorId);
+
+    if (!collector || collector.role !== 'collector') {
+      console.error('Collecteur non trouvé ou rôle incorrect');
+      return;
+    }
+
+    collector.convertiblePoints = collector.convertiblePoints || 0;
+    collector.convertiblePoints += points;
+
+    let voucher = '';
+    if (collector.convertiblePoints >= 500) {
+      voucher = '350 Dh';
+      collector.convertiblePoints -= 500;  
+    } else if (collector.convertiblePoints >= 200) {
+      voucher = '120 Dh';
+      collector.convertiblePoints -= 200;
+    } else if (collector.convertiblePoints >= 100) {
+      voucher = '50 Dh';
+      collector.convertiblePoints -= 100;
+    }
+
+    await db.put('users', collector);
+
+    if (voucher) {
+      console.log(`Bon d'achat attribué : ${voucher}`);
+    }
+  }
+
 
   async updateCollectRequest(id: number, data: Partial<MyDB['collectRequests']['value']>) {
     const db = await this.getDB();
@@ -131,18 +200,19 @@ export class IndexedDbService {
   async getCollectRequestsByCity(city: string) {
     const db = await this.getDB();
     const allRequests = await db.getAll('collectRequests');
+
     console.log('Toutes les demandes :', allRequests);
 
     for (const request of allRequests) {
-      if (!request.wasteType || !Array.isArray(request.wasteType)) {
-        request.wasteType = [];
+      if (!request.wasteTypes || !Array.isArray(request.wasteTypes)) {
+        request.wasteTypes = [];
         await db.put('collectRequests', request);
       }
     }
 
     const filteredRequests = allRequests.filter((req) => {
       console.log('City:', city, 'Request City:', req.city);
-      return req.city === city && req.status === 'En attente';
+      return req.city === city;
     });
 
     console.log('Demandes filtrées:', filteredRequests);
@@ -167,8 +237,8 @@ export class IndexedDbService {
     const allRequests = await db.getAll('collectRequests');
 
     for (const request of allRequests) {
-      if (!request.wasteType || !Array.isArray(request.wasteType)) {
-        request.wasteType = [];
+      if (!request.wasteTypes || !Array.isArray(request.wasteTypes)) {
+        request.wasteTypes = [];
         await db.put('collectRequests', request);
       }
     }

@@ -1,53 +1,66 @@
 <div class="container">
   <h2>Demandes de Collecte Disponibles</h2>
+
   <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
   </div>
-  <table>
-    <thead>
-      <tr>
-        <th>Types de déchets</th>
-        <th>Poids estimé (g)</th>
-        <th>Adresse</th>
-        <th>Ville</th>
-        <th>Date</th>
-        <th>Créneau horaire</th>
-        <th>Statut</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let request of requests">
-        <td>
-          {{ request.wasteTypes ? request.wasteTypes.join(", ") : "Non spécifié" }}
-        </td>
-        <td>{{ request.estimatedWeight }}</td>
-        <td>{{ request.address }}</td>
-        <td>{{ request.city }}</td>
-        <td>{{ request.date }}</td>
-        <td>{{ request.timeSlot }}</td>
-        <td>{{ request.status }}</td>
-        <td>
-          <button
-            *ngIf="request.status === 'En attente'"
-            (click)="acceptRequest(request.id)"
-          >
-            Accepter
-          </button>
-          <button
-            *ngIf="request.status === 'Occupée'"
-            (click)="validateRequest(request.id)"
-          >
+
+  <div class="card-container">
+    <div *ngFor="let request of requests" class="card">
+      <div class="card-header">
+        <h3>Demande #{{ request.id }}</h3>
+        <span class="status-badge" [ngClass]="getStatusClass(request.status)">
+          {{ request.status }}
+        </span>
+      </div>
+      <div class="card-body">
+        <p>
+          <strong>Types de déchets :</strong>
+          {{
+            request.wasteTypes ? request.wasteTypes.join(", ") : "Non spécifié"
+          }}
+        </p>
+        <p><strong>Poids estimé :</strong> {{ request.estimatedWeight }}g</p>
+        <p><strong>Adresse :</strong> {{ request.address }}</p>
+        <p><strong>Ville :</strong> {{ request.city }}</p>
+        <p><strong>Date :</strong> {{ request.date }}</p>
+        <p><strong>Créneau horaire :</strong> {{ request.timeSlot }}</p>
+      </div>
+      <div class="card-actions">
+        <button
+          *ngIf="request.status === 'En attente'"
+          (click)="acceptRequest(request.id)"
+          class="btn-accept"
+        >
+          Accepter
+        </button>
+
+        <button
+          *ngIf="request.status === 'Occupée'"
+          (click)="startCollection(request.id)"
+          class="btn-start"
+        >
+          Commencer la collecte
+        </button>
+
+        <div *ngIf="request.status === 'En cours'">
+          <button (click)="validateRequest(request.id)" class="btn-validate">
             Valider
           </button>
-          <button
-            *ngIf="request.status === 'Occupée'"
-            (click)="rejectRequest(request.id)"
-          >
+          <button (click)="rejectRequest(request.id)" class="btn-reject">
             Rejeter
           </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        </div>
+
+          <div
+          *ngIf="request.status === 'Validée' || request.status === 'En cours'"
+          >
+            <button (click)="viewDetails(request.id)" class="btn-details">
+              Voir les détails
+            </button>
+          </div>
+
+      </div>
+    </div>
+  </div>
 </div>
