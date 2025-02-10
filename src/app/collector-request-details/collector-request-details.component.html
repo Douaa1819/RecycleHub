@@ -1,32 +1,77 @@
-  <div class="container">
-    <h2>Détails de la demande</h2>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la Demande - RecycleHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="request-details-container">
+        <div class="request-details-header">
+            <h1>Détails de la Demande</h1>
+        </div>
 
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
+        <div class="request-details-content">
+            <div class="detail-item">
+                <span class="label">Types de déchets</span>
+                <span class="value">{{ request.wasteTypes ? request.wasteTypes : "Non spécifié" }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Poids estimé</span>
+                <span class="value">{{ request.estimatedWeight }}g</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Adresse</span>
+                <span class="value">{{ request.address }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Ville</span>
+                <span class="value">{{ request.city }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Date</span>
+                <span class="value">{{ request.date }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Créneau horaire</span>
+                <span class="value">{{ request.timeSlot }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Statut</span>
+                <span class="value">
+                    <span class="status-badge
+                        {{ request.status === 'En cours' ? 'status-pending' :
+                           request.status === 'Terminé' ? 'status-completed' :
+                           'status-canceled' }}">
+                        {{ request.status }}
+                    </span>
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Points attribués</span>
+                <span class="value">{{ request.points }}</span>
+            </div>
+        </div>
+
+        <div class="photo-upload">
+            <input type="file" id="photoUpload" accept="image/*">
+            <label for="photoUpload">
+                <i class="fas fa-upload"></i> Ajouter une photo
+            </label>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-primary">Valider la collecte</button>
+            <a (click)="goBack()" class="btn btn-secondary">Retour</a>
+        </div>
     </div>
-
-    <div *ngIf="request" class="request-details">
-      <p>
-        <strong>Types de déchets :</strong>
-        {{ request.wasteTypes ? request.wasteTypes: "Non spécifié" }}
-      </p>
-      <p><strong>Poids estimé :</strong> {{ request.estimatedWeight }}g</p>
-      <p><strong>Adresse :</strong> {{ request.address }}</p>
-      <p><strong>Ville :</strong> {{ request.city }}</p>
-      <p><strong>Date :</strong> {{ request.date }}</p>
-      <p><strong>Créneau horaire :</strong> {{ request.timeSlot }}</p>
-      <p><strong>Statut :</strong> {{ request.status }}</p>
-
-      <label for="actualWeight">Poids réel (g) :</label>
-      <input type="number" [(ngModel)]="actualWeight" id="actualWeight" required />
-
-      <p><strong>Points attribués :</strong> {{ request.points }}</p>
-
-      <label for="photos">Ajouter une photo (optionnel) :</label>
-      <input type="file" (change)="onFileChange($event)" />
-
-      <button (click)="onValidateCollecte(request.id)" class="btn btn-success">Valider la collecte</button>
-    </div>
-
-    <button (click)="goBack()" class="btn-back">Retour</button>
-  </div>
+</body>
+</html>

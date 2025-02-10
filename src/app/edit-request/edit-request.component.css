@@ -1,53 +1,98 @@
 .container {
-  max-width: 800px;
-  margin: 0 auto;
+  max-width: 500px;
+  margin: 40px auto;
   padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #2c3e50;
 }
 
 .form-group {
   margin-bottom: 15px;
 }
 
-.form-group label {
+label {
+  font-weight: 600;
   display: block;
   margin-bottom: 5px;
-  font-weight: bold;
+  color: #34495e;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+input,
+select,
+textarea {
   width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  font-size: 14px;
 }
 
-.form-group select[multiple] {
-  height: 100px;
-}
-
-.error {
-  color: red;
-  font-size: 0.9em;
-}
-
-.error-message {
-  color: red;
-  margin-bottom: 15px;
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
 button {
-  padding: 10px 20px;
-  background-color: #007bff;
+  width: 100%;
+  padding: 12px;
+  background: #27ae60;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
+  font-size: 16px;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 button:disabled {
-  background-color: #ccc;
+  background: #95a5a6;
   cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background: #2ecc71;
+}
+
+.error {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.error-message {
+  background: #e74c3c;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+img {
+  display: block;
+  max-width: 100px;
+  margin-top: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: 90%;
+    padding: 15px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
 }
