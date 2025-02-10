@@ -1,3 +1,4 @@
+import { UserService } from './../../../core/services/user.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -30,7 +31,7 @@ export class RegisterComponent {
 
   constructor(
     private fb: FormBuilder,
-    private indexedDbService: IndexedDbService,
+    private userService: UserService,
     private router: Router
   ) {
     this.registerForm = this.fb.group({
@@ -53,7 +54,7 @@ export class RegisterComponent {
       const user = this.registerForm.value;
 
       try {
-        await this.indexedDbService.addUser(user);
+        await this.userService.addUser(user);
         alert('Inscription réussie !');
         this.router.navigate(['/login']);
       } catch (error) {

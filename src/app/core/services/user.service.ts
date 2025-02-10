@@ -27,4 +27,9 @@ export class UserService {
     const db = await this.indexedDbService.getDB();
     return db.delete('users', email);
   }
+
+
+  
+
+
 }

@@ -1,8 +1,8 @@
+import { UserService } from './../../../core/services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { IndexedDbService } from '../../../core/services/indexed-db.service';
 
 @Component({
   selector: 'app-profile',
@@ -18,8 +18,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private indexedDbService: IndexedDbService,
-    private router: Router
+private userService :UserService ,
+   private router: Router
   ) {
     this.profileForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -48,7 +48,7 @@ export class ProfileComponent implements OnInit {
       const updatedUser = { ...this.currentUser, ...this.profileForm.value };
 
       try {
-        await this.indexedDbService.updateUser(updatedUser);
+        await this.userService.updateUser(updatedUser);
         localStorage.setItem('currentUser', JSON.stringify(updatedUser));
         alert('Informations mises à jour avec succès !');
       } catch (error) {
@@ -63,7 +63,7 @@ export class ProfileComponent implements OnInit {
   async deleteAccount() {
     if (confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')) {
       try {
-        await this.indexedDbService.deleteUser(this.currentUser.email);
+        await this.userService.deleteUser(this.currentUser.email);
         localStorage.removeItem('currentUser');
         this.router.navigate(['/login']);
       } catch (error) {
