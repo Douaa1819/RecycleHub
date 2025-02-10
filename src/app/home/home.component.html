@@ -13,8 +13,8 @@
     <nav>
         <div class="logo">RecycleHub</div>
         <div class="nav-buttons">
-            <a href="#" class="button button-secondary">Se connecter</a>
-            <a href="#" class="button button-primary">S'inscrire</a>
+          <a (click)="navigateToLogin()" class="button button-secondary">Se connecter</a>
+          <a (click)="navigateToRegister()" class="button button-primary">S'inscrire</a>
         </div>
     </nav>
 
@@ -45,7 +45,7 @@
     <section class="cta">
         <h2>Prêt à faire la différence ?</h2>
         <div class="cta-buttons">
-            <a href="#" class="button button-primary">S'inscrire gratuitement</a>
+           <a (click)="navigateToRegister()" class="button button-primary">S'inscrire gratuitement</a>
             <a href="#" class="button button-secondary">En savoir plus</a>
         </div>
     </section>

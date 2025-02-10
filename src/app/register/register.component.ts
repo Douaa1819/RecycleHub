@@ -67,6 +67,11 @@ export class RegisterComponent {
     }
   }
 
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
+  }
+
   onFileChange(event: any) {
     const file = event.target.files[0];
     if (file) {
