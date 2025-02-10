@@ -41,12 +41,24 @@ export class CollectRequestComponent {
       photos: [null],
       estimatedWeight: ['', [Validators.required, Validators.min(1000)]],
       address: ['', Validators.required],
-      date: ['', Validators.required],
+      date: ['', [Validators.required, this.validateFutureDate]],
       city: ['', Validators.required],
       timeSlot: ['', [Validators.required, this.validateTimeSlot]],
       notes: [''],
     });
   }
+
+  validateFutureDate(control: any) {
+    const selectedDate = new Date(control.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      return { pastDate: true };
+    }
+    return null;
+  }
+
 
   validateTimeSlot(control: any) {
     const time = control.value;

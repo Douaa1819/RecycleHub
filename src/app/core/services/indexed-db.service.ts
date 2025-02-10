@@ -148,18 +148,14 @@ export class IndexedDbService {
     // Récupérer le collecteur dans la base de données
     const collector = await db.get('users', collectorId);
 
-    const updatedCollector = await db.get('users', collectorId);
-console.log('Collecteur mis à jour :', updatedCollector);
-
     if (!collector) {
       console.error('Collecteur non trouvé dans la base de données');
       return;
     }
-    console.log('Points convertibles avant attribution des bons :', collector.convertiblePoints);
-
 
     collector.convertiblePoints = collector.convertiblePoints || 0;
 
+    console.log('Points convertibles avant attribution des bons :', collector.convertiblePoints);
 
     collector.convertiblePoints += points;
     console.log('Points convertibles mis à jour :', collector.convertiblePoints);
@@ -198,10 +194,13 @@ console.log('Collecteur mis à jour :', updatedCollector);
 
     const updatedRequest = { ...existingRequest, ...data };
 
+    const actualWeight = updatedRequest.actualWeight || updatedRequest.estimatedWeight;
+    const estimatedWeight = updatedRequest.estimatedWeight;
+
     updatedRequest.points = this.calculatePoints(
       updatedRequest.wasteTypes,
-      updatedRequest.estimatedWeight,
-      updatedRequest.actualWeight
+      estimatedWeight,
+      actualWeight
     );
 
     await db.put('collectRequests', updatedRequest);

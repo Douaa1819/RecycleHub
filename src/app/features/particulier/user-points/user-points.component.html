@@ -1,0 +1,30 @@
+<div class="user-points-container">
+  <h2>Mes Points et Bons d'Achat</h2>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div class="points-display">
+    <p>
+      Points disponibles : <strong>{{ convertiblePoints }}</strong>
+    </p>
+  </div>
+
+  <div class="voucher-selection">
+    <label for="voucher">Convertir mes points en bon d'achat :</label>
+    <select id="voucher" [(ngModel)]="selectedVoucher">
+      <option [value]="null">Sélectionnez un bon d'achat</option>
+      <option *ngFor="let voucher of vouchers" [value]="voucher.points">
+        {{ voucher.points }} points = {{ voucher.value }}
+      </option>
+    </select>
+  </div>
+
+  <button
+    (click)="convertPoints()"
+    [disabled]="!selectedVoucher || convertiblePoints < selectedVoucher"
+  >
+    Convertir
+  </button>
+</div>

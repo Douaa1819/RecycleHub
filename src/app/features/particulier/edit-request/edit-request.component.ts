@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IndexedDbService } from '../../../core/services/indexed-db.service';
 
 @Component({
@@ -15,6 +15,7 @@ export class EditRequestComponent implements OnInit {
   editForm: FormGroup;
   requestId: number | null = null;
   errorMessage: string | null = null;
+  wasteTypes: string[] = ['Plastique', 'Verre', 'Papier', 'Métal']; // Ajoutez cette ligne
 
   constructor(
     private fb: FormBuilder,
@@ -23,16 +24,26 @@ export class EditRequestComponent implements OnInit {
     private router: Router
   ) {
     this.editForm = this.fb.group({
-      wasteTypes: [[], [Validators.required, Validators.minLength(1)]],
+      wasteTypes: ['', Validators.required],
       photos: [null],
       estimatedWeight: ['', [Validators.required, Validators.min(1000)]],
       address: ['', Validators.required],
-      date: ['', Validators.required],
+      date: ['', [Validators.required, this.validateFutureDate]],
       timeSlot: ['', [Validators.required, this.validateTimeSlot]],
       notes: [''],
     });
   }
 
+  validateFutureDate(control: any) {
+    const selectedDate = new Date(control.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      return { pastDate: true };
+    }
+    return null;
+  }
   async ngOnInit() {
     this.requestId = +this.route.snapshot.paramMap.get('id')!;
     const request = await this.indexedDbService.getCollectRequest(this.requestId);
@@ -67,15 +78,24 @@ export class EditRequestComponent implements OnInit {
 
   async onSubmit() {
     if (this.editForm.valid && this.requestId) {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      const userId = currentUser.email;
+
+      const pendingRequests = await this.indexedDbService.getPendingRequests(userId);
+
+      const totalWeight = pendingRequests
+        .filter(req => req.id !== this.requestId)
+        .reduce((sum, req) => sum + req.estimatedWeight, 0);
+
+      if (totalWeight + this.editForm.value.estimatedWeight > 10000) {
+        this.errorMessage = 'Le poids total des collectes ne doit pas dépasser 10 kg.';
+        return;
+      }
+
       try {
         await this.indexedDbService.updateCollectRequest(this.requestId, this.editForm.value);
         alert('Demande mise à jour avec succès !');
-
-        //  update la liste après mise à jour
-        const updatedRequest = await this.indexedDbService.getCollectRequest(this.requestId);
-        console.log('Nouvelle version de la demande:', updatedRequest);
-
-        this.router.navigate(['/user-requests']);
+        this.router.navigate(['/particulier-dashboard']);
       } catch (error) {
         console.error('Erreur lors de la mise à jour :', error);
         this.errorMessage = 'Une erreur est survenue lors de la mise à jour.';

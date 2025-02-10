@@ -1,7 +1,7 @@
 import { CollectorRequestsComponent } from './features/collector/collector-requests/collector-requests.component';
 import { CollectorRequestDetailsComponent } from './features/collector/collector-request-details/collector-request-details.component';
 import { LogoutComponent } from './features/auth/logout/logout.component';
-import { EditRequestComponent } from './features/collector/edit-request/edit-request.component';
+import { EditRequestComponent } from './features/particulier/edit-request/edit-request.component';
 import { UserRequestsComponent } from './features/particulier/user-requests/user-requests.component';
 import { CollectRequestComponent } from './features/particulier/collect-request/collect-request.component';
 import { ProfileComponent } from './features/auth/profile/profile.component';

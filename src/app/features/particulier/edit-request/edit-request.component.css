@@ -85,6 +85,38 @@ img {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.waste-type-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.waste-type-option {
+  flex: 1;
+}
+
+.waste-type-input {
+  display: none;
+}
+
+.waste-type-label {
+  display: block;
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.waste-type-input:checked + .waste-type-label {
+  border-color: #2ecc71;
+  background-color: #e8f5e9;
+}
+
+.waste-type-label:hover {
+  border-color: #2ecc71;
+}
+
 @media (max-width: 600px) {
   .container {
     width: 90%;

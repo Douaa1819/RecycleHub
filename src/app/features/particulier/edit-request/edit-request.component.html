@@ -1,21 +1,23 @@
 <div class="container">
   <h2>Modifier la Demande de Collecte</h2>
   <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="wasteTypes">Types de déchets</label>
-      <select
-        id="wasteTypes"
-        formControlName="wasteTypes"
-        multiple
-      >
-        <option value="plastique" [selected]="editForm.value.wasteTypes.includes('plastique')">Plastique</option>
-        <option value="verre" [selected]="editForm.value.wasteTypes.includes('verre')">Verre</option>
-        <option value="papier" [selected]="editForm.value.wasteTypes.includes('papier')">Papier</option>
-        <option value="metal" [selected]="editForm.value.wasteTypes.includes('metal')">Métal</option>
-      </select>
-      <div *ngIf="editForm.get('wasteTypes')?.invalid && editForm.get('wasteTypes')?.touched">
-        <small class="error">Veuillez sélectionner au moins un type de déchet.</small>
-      </div>
+      <div class="form-group">
+        <label>Type de déchet</label>
+        <div class="waste-type-container">
+          <div class="waste-type-option" *ngFor="let type of wasteTypes">
+            <input
+              type="radio"
+              [value]="type"
+              formControlName="wasteTypes"
+              class="waste-type-input"
+              id="{{ type }}"
+            />
+            <label [for]="type" class="waste-type-label">{{ type }}</label>
+          </div>
+        </div>
+        <div *ngIf="editForm.get('wasteTypes')?.invalid && editForm.get('wasteTypes')?.touched">
+          <small class="error">Veuillez sélectionner un type de déchet.</small>
+        </div>
     </div>
 
     <div class="form-group">
@@ -61,6 +63,9 @@
         type="date"
         formControlName="date"
       />
+      <div *ngIf="editForm.get('date')?.errors?.['pastDate']"> 
+        <small class="error">La date doit être dans le futur.</small>
+      </div>
       <div *ngIf="editForm.get('date')?.invalid && editForm.get('date')?.touched">
         <small class="error">Ce champ est obligatoire.</small>
       </div>
