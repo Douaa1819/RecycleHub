@@ -3,7 +3,7 @@ html, body {
   height: 100%;
   margin: 0;
   font-family: 'Arial', sans-serif;
-  background-color: #f4f4f4;
+  background-color: #ffffff;
 }
 
 .login-container {
@@ -14,7 +14,7 @@ html, body {
   min-height: 100vh;
   padding: 2rem;
   box-sizing: border-box;
-  background: linear-gradient(135deg, #f6f8f9 0%, #e5ebee 100%);
+  background: linear-gradient(135deg, #fdfdfd 0%, #ffffff 100%);
 }
 
 .login-card {

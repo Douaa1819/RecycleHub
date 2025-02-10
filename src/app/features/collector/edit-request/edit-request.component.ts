@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { IndexedDbService } from '../services/indexed-db.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { IndexedDbService } from '../../../core/services/indexed-db.service';
 
 @Component({
   selector: 'app-edit-request',

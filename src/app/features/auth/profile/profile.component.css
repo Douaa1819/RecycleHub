@@ -6,7 +6,7 @@
 }
 
 body {
-  background-color: #f4f7fb;
+  background-color: #ffffff;
   color: #333;
   line-height: 1.6;
 }
@@ -35,9 +35,9 @@ body {
 
 .profile-title {
   text-align: center;
-  color: #2ecc71;
+  color: #333;
   margin-bottom: 2rem;
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   position: relative;
 }
 

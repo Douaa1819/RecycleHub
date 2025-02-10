@@ -1,0 +1,30 @@
+<div class="dashboard-container">
+  <!-- Navbar ou boutons de navigation -->
+  <div class="navbar">
+    <button (click)="showSection('requests')" [class.active]="activeSection === 'requests'">
+      Mes Demandes
+    </button>
+    <button (click)="showSection('create-request')" [class.active]="activeSection === 'create-request'">
+      Créer une Demande
+    </button>
+    <button (click)="showSection('profile')" [class.active]="activeSection === 'profile'">
+      Profil
+    </button>
+    <button (click)="showSection('points')" [class.active]="activeSection === 'points'">
+      Mes Points
+    </button>
+    <button> <a (click)="logout()">Se déconnecter
+    </a>
+    </button>
+  </div>
+
+  <div class="content">
+    <ng-container [ngSwitch]="activeSection">
+      <app-user-requests *ngSwitchCase="'requests'"></app-user-requests>
+      <app-collect-request *ngSwitchCase="'create-request'"></app-collect-request>
+      <app-profile *ngSwitchCase="'profile'"></app-profile>
+      <!-- <app-user-points *ngSwitchCase="'points'"></app-user-points> -->
+    </ng-container>
+  </div>
+</div>
+

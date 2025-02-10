@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IndexedDbService } from '../services/indexed-db.service';
+import { IndexedDbService } from '../../../core/services/indexed-db.service';
 
 @Component({
   selector: 'app-collector-request-details',
@@ -75,7 +75,7 @@ export class CollectorRequestDetailsComponent implements OnInit {
       });
 
       alert('Demande validée avec succès ! Points mis à jour.');
-      this.router.navigate(['/collector-request']);
+      this.router.navigate(['/collector-dashboard']);
     } catch (error) {
       console.error('Erreur lors de la validation de la demande :', error);
       this.errorMessage = 'Une erreur est survenue lors de la validation.';
@@ -96,6 +96,6 @@ export class CollectorRequestDetailsComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/collector-request']);
+    this.router.navigate(['collector-dashboard']);
   }
 }

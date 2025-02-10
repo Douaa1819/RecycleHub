@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IndexedDbService } from '../services/indexed-db.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { IndexedDbService } from '../../../core/services/indexed-db.service';
 
 @Component({
   selector: 'app-collector-requests',
