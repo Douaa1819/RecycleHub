@@ -1,8 +1,9 @@
+import { CollectRequestService } from './../../../core/services/collect-request.service';
+import { UserService } from './../../../core/services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { IndexedDbService } from '../../../core/services/indexed-db.service';
 
 @Component({
   selector: 'app-user-requests',
@@ -16,7 +17,8 @@ export class UserRequestsComponent implements OnInit {
   errorMessage: string | null = null;
 
   constructor(
-    private indexedDbService: IndexedDbService,
+    private collectRequestService: CollectRequestService,
+
     private router: Router
   ) {}
 
@@ -29,13 +31,13 @@ export class UserRequestsComponent implements OnInit {
     const userId = currentUser.email;
     console.log('Utilisateur actuel:', userId);
 
-    this.requests = await this.indexedDbService.getUserRequests(userId);
+    this.requests = await this.collectRequestService.getUserRequests(userId);
     console.log('Demandes récupérées:', this.requests);
   }
 
   async deleteRequest(id: number) {
     try {
-      await this.indexedDbService.deleteCollectRequest(id);
+      await this.collectRequestService.deleteCollectRequest(id);
       await this.loadRequests();
     } catch (error) {
       console.error('Erreur lors de la suppression de la demande :', error);

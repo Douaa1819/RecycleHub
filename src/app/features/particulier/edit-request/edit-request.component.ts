@@ -1,3 +1,4 @@
+import { CollectRequestService } from './../../../core/services/collect-request.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -15,11 +16,12 @@ export class EditRequestComponent implements OnInit {
   editForm: FormGroup;
   requestId: number | null = null;
   errorMessage: string | null = null;
-  wasteTypes: string[] = ['Plastique', 'Verre', 'Papier', 'Métal']; // Ajoutez cette ligne
+  wasteTypes: string[] = ['Plastique', 'Verre', 'Papier', 'Métal'];
 
   constructor(
     private fb: FormBuilder,
     private indexedDbService: IndexedDbService,
+    private collectRequestService: CollectRequestService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -46,7 +48,7 @@ export class EditRequestComponent implements OnInit {
   }
   async ngOnInit() {
     this.requestId = +this.route.snapshot.paramMap.get('id')!;
-    const request = await this.indexedDbService.getCollectRequest(this.requestId);
+    const request = await this.collectRequestService.getCollectRequest(this.requestId);
     console.log('Demande récupérée pour édition:', request);
 
     if (request) {
@@ -81,7 +83,7 @@ export class EditRequestComponent implements OnInit {
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
       const userId = currentUser.email;
 
-      const pendingRequests = await this.indexedDbService.getPendingRequests(userId);
+      const pendingRequests = await this.collectRequestService.getPendingRequests(userId);
 
       const totalWeight = pendingRequests
         .filter(req => req.id !== this.requestId)
@@ -93,7 +95,7 @@ export class EditRequestComponent implements OnInit {
       }
 
       try {
-        await this.indexedDbService.updateCollectRequest(this.requestId, this.editForm.value);
+        await this.collectRequestService.updateCollectRequest(this.requestId, this.editForm.value);
         alert('Demande mise à jour avec succès !');
         this.router.navigate(['/particulier-dashboard']);
       } catch (error) {

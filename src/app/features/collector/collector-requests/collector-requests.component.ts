@@ -1,7 +1,7 @@
+import { CollectRequestService } from './../../../core/services/collect-request.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { IndexedDbService } from '../../../core/services/indexed-db.service';
 
 @Component({
   selector: 'app-collector-requests',
@@ -15,8 +15,9 @@ export class CollectorRequestsComponent implements OnInit {
   errorMessage: string | null = null;
 
   constructor(
-    private indexedDbService: IndexedDbService,
-    private router: Router
+    private router: Router,
+    private  collectRequestService: CollectRequestService,
+
   ) {}
 
   async ngOnInit() {
@@ -42,8 +43,8 @@ export class CollectorRequestsComponent implements OnInit {
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const city = currentUser.city;
     if (city) {
-      const allRequests = await this.indexedDbService.getCollectRequestsByCity(city);
-      this.requests = allRequests.filter(req => ['En attente', 'Occupée', 'En cours','Validée'].includes(req.status));
+      const allRequests = await this.collectRequestService.getCollectRequestsByCity(city);
+      this.requests = allRequests.filter(req => ['En attente', 'Occupée', 'En cours', 'Validée'].includes(req.status));
       console.log('Requests:', this.requests);
     } else {
       this.errorMessage = 'Ville non définie pour le collecteur.';
@@ -51,9 +52,10 @@ export class CollectorRequestsComponent implements OnInit {
   }
 
 
+
   async acceptRequest(id: number) {
     try {
-      await this.indexedDbService.updateCollectRequestStatus(id, 'Occupée');
+      await this.collectRequestService.updateCollectRequestStatus(id, 'Occupée');
       await this.loadRequests();
     } catch (error) {
       console.error('Erreur lors de l\'acceptation de la demande :', error);
@@ -63,7 +65,7 @@ export class CollectorRequestsComponent implements OnInit {
 
   async validateRequest(id: number) {
     try {
-      await this.indexedDbService.updateCollectRequestStatus(id, 'Validée');
+      await this.collectRequestService.updateCollectRequestStatus(id, 'Validée');
       await this.loadRequests();
     } catch (error) {
       console.error('Erreur lors de la validation de la demande :', error);
@@ -74,7 +76,7 @@ export class CollectorRequestsComponent implements OnInit {
 
   async startCollection(id: number) {
     try {
-      await this.indexedDbService.updateCollectRequestStatus(id, 'En cours');
+      await this.collectRequestService.updateCollectRequestStatus(id, 'En cours');
       await this.loadRequests();
     } catch (error) {
       console.error('Erreur lors du démarrage de la collecte :', error);
@@ -83,7 +85,7 @@ export class CollectorRequestsComponent implements OnInit {
   }
   async rejectRequest(id: number) {
     try {
-      await this.indexedDbService.updateCollectRequestStatus(id, 'Rejetée');
+      await this.collectRequestService.updateCollectRequestStatus(id, 'Rejetée');
       await this.loadRequests();
     } catch (error) {
       console.error('Erreur lors du rejet de la demande :', error);

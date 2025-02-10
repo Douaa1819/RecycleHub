@@ -1,8 +1,9 @@
+import { CollectRequestService } from './../../../core/services/collect-request.service';
+import { PointsService } from './../../../core/services/points.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IndexedDbService } from '../../../core/services/indexed-db.service';
 
 @Component({
   selector: 'app-collector-request-details',
@@ -19,14 +20,15 @@ export class CollectorRequestDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private indexedDbService: IndexedDbService
+    private collectRequestService : CollectRequestService,
+    private pointsService : PointsService
   ) {}
 
   async ngOnInit() {
     const requestId = Number(this.route.snapshot.paramMap.get('id'));
     if (requestId) {
       try {
-        this.request = await this.indexedDbService.getCollectRequest(requestId);
+        this.request = await this.collectRequestService.getCollectRequest(requestId);
       } catch (error) {
         this.errorMessage = 'Erreur lors du chargement de la demande.';
         console.error(error);
@@ -35,7 +37,7 @@ export class CollectorRequestDetailsComponent implements OnInit {
   }
 
   async onValidateCollecte(requestId: number) {
-    const request = await this.indexedDbService.getCollectRequest(requestId);
+    const request = await this.collectRequestService.getCollectRequest(requestId);
 
     if (!request) {
       this.errorMessage = 'La demande n\'existe pas.';
@@ -58,16 +60,16 @@ export class CollectorRequestDetailsComponent implements OnInit {
       request.estimatedWeight = this.actualWeight;
     }
 
-    const points = this.indexedDbService.calculatePoints(
+    const points = this.pointsService.calculatePoints(
       Array.isArray(request.wasteTypes) ? request.wasteTypes : [request.wasteTypes],
       request.estimatedWeight,
       weightToUse
     );
 
-    await this.indexedDbService.updateCollectorPoints(request.userId, points);
+    await this.pointsService.updateCollectorPoints(request.userId, points);
 
     try {
-      await this.indexedDbService.updateCollectRequest(requestId, {
+      await this.collectRequestService.updateCollectRequest(requestId, {
         actualWeight: this.actualWeight || weightToUse,
         estimatedWeight: request.estimatedWeight,
         points: points,

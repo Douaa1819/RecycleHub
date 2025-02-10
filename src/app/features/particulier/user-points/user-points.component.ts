@@ -1,3 +1,5 @@
+import { UserService } from './../../../core/services/user.service';
+import { PointsService } from './../../../core/services/points.service';
 import { Component, OnInit } from '@angular/core';
 import { IndexedDbService } from '../../../core/services/indexed-db.service';
 import { CommonModule } from '@angular/common';
@@ -20,7 +22,13 @@ export class UserPointsComponent implements OnInit {
   selectedVoucher: number | null = null;
   errorMessage: string | null = null;
 
-  constructor(private indexedDbService: IndexedDbService) {}
+  constructor(private indexedDbService: IndexedDbService,
+    private pointsService: PointsService,
+    private userService: UserService
+
+
+
+  ) {}
 
   async ngOnInit() {
     await this.loadUserPoints();
@@ -29,7 +37,7 @@ export class UserPointsComponent implements OnInit {
   async loadUserPoints() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     if (currentUser.email) {
-      const user = await this.indexedDbService.getUser(currentUser.email);
+      const user = await this.userService.getUser(currentUser.email);
       if (user) {
         this.convertiblePoints = user.convertiblePoints || 0;
       }
@@ -50,7 +58,7 @@ export class UserPointsComponent implements OnInit {
 
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     if (currentUser.email) {
-      const user = await this.indexedDbService.getUser(currentUser.email);
+      const user = await this.userService.getUser(currentUser.email);
       if (user) {
         user.convertiblePoints = user.convertiblePoints || 0;
 
@@ -60,7 +68,7 @@ export class UserPointsComponent implements OnInit {
         }
 
         user.convertiblePoints -= selectedVoucher.points;
-        await this.indexedDbService.updateUser(user);
+        await this.userService.updateUser(user);
         this.convertiblePoints = user.convertiblePoints;
         alert(`Bon d'achat de ${selectedVoucher.value} attribué avec succès !`);
         this.selectedVoucher = null;

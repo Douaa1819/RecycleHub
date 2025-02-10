@@ -1,3 +1,4 @@
+import { CollectRequestService } from './../../../core/services/collect-request.service';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -33,8 +34,8 @@ export class CollectRequestComponent {
 
   constructor(
     private fb: FormBuilder,
-    private indexedDbService: IndexedDbService,
-    private router: Router
+    private router: Router,
+    private collectRequestService: CollectRequestService,
   ) {
     this.collectRequestForm = this.fb.group({
       wasteTypes: ['', Validators.required],
@@ -75,7 +76,7 @@ export class CollectRequestComponent {
       const userId = currentUser.email;
 
 
-      const pendingRequests = await this.indexedDbService.getPendingRequests(userId);
+      const pendingRequests = await this.collectRequestService.getPendingRequests(userId);
       if (pendingRequests.length >= 3) {
         this.errorMessage = 'Vous ne pouvez pas avoir plus de 3 demandes en attente.';
         this.isSubmitting = false;
@@ -96,7 +97,7 @@ export class CollectRequestComponent {
       };
 
       try {
-        await this.indexedDbService.addCollectRequest(request);
+        await this.collectRequestService.addCollectRequest(request);
         alert('Demande de collecte soumise avec succès !');
         this.router.navigate(['/particulier-dashboard']);
       } catch (error) {
