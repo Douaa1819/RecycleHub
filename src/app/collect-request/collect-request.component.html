@@ -2,17 +2,18 @@
   <h2>Demande de Collecte</h2>
   <form [formGroup]="collectRequestForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="wasteTypes">Types de déchets</label>
-      <select id="wasteTypes" formControlName="wasteTypes" multiple>
-        <option value="plastique">Plastique</option>
-        <option value="verre">Verre</option>
-        <option value="papier">Papier</option>
-        <option value="metal">Métal</option>
-      </select>
-      <div *ngIf="collectRequestForm.get('wasteTypes')?.invalid && collectRequestForm.get('wasteTypes')?.touched">
-        <small class="error">Veuillez sélectionner au moins un type de déchet.</small>
+      <div class="form-group">
+        <label>Type de déchet </label>
+        <div *ngFor="let type of wasteTypes">
+          <input type="radio" [value]="type" formControlName="wasteTypes" id="{{type}}" />
+          <label [for]="type">{{ type }}</label>
+        </div>
+        <div *ngIf="collectRequestForm.get('wasteTypes')?.invalid && collectRequestForm.get('wasteTypes')?.touched">
+          <small class="error">Veuillez sélectionner un type de déchet.</small>
+        </div>
       </div>
     </div>
+
 
     <div class="form-group">
       <label for="photos">Photos des déchets (optionnel)</label>

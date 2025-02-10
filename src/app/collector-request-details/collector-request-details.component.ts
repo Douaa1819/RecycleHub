@@ -37,8 +37,15 @@ export class CollectorRequestDetailsComponent implements OnInit {
   async onValidateCollecte(requestId: number) {
     const request = await this.indexedDbService.getCollectRequest(requestId);
 
-    if (!request || !this.actualWeight) {
-      this.errorMessage = 'Veuillez entrer un poids réel valide.';
+    if (!request) {
+      this.errorMessage = 'La demande n\'existe pas.';
+      return;
+    }
+
+    const weightToUse = this.actualWeight || request.estimatedWeight;
+
+    if (!weightToUse) {
+      this.errorMessage = 'Veuillez entrer un poids valide.';
       return;
     }
 
@@ -47,24 +54,34 @@ export class CollectorRequestDetailsComponent implements OnInit {
       return;
     }
 
-    request.actualWeight = this.actualWeight;
+    if (this.actualWeight && this.actualWeight !== request.estimatedWeight) {
+      request.estimatedWeight = this.actualWeight;
+    }
 
-    const points = this.indexedDbService.calculatePoints(request.wasteTypes, request.estimatedWeight, this.actualWeight);
+    const points = this.indexedDbService.calculatePoints(
+      Array.isArray(request.wasteTypes) ? request.wasteTypes : [request.wasteTypes],
+      request.estimatedWeight,
+      weightToUse
+    );
 
     await this.indexedDbService.updateCollectorPoints(request.userId, points);
 
-    request.points = points;
-    request.status = 'Validée';
-
     try {
-      await this.indexedDbService.updateCollectRequest(requestId, { points, status: 'Validée', actualWeight: this.actualWeight });
-      alert('Demande validée avec succès !');
+      await this.indexedDbService.updateCollectRequest(requestId, {
+        actualWeight: this.actualWeight || weightToUse,
+        estimatedWeight: request.estimatedWeight,
+        points: points,
+        status: 'Validée'
+      });
+
+      alert('Demande validée avec succès ! Points mis à jour.');
       this.router.navigate(['/collector-request']);
     } catch (error) {
       console.error('Erreur lors de la validation de la demande :', error);
       this.errorMessage = 'Une erreur est survenue lors de la validation.';
     }
   }
+
 
 
   onFileChange(event: any) {

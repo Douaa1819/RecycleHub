@@ -25,7 +25,7 @@ interface MyDB extends DBSchema {
       userId: string;
       wasteTypes: string[];
       photos?: string[];
-      actualWeight?: number;
+    actualWeight?: number;
       estimatedWeight: number;
       address: string;
       city: string;
@@ -91,7 +91,7 @@ export class IndexedDbService {
   }
 
 
-  calculatePoints(wasteTypes: string[], estimatedWeight: number, actualWeight: number): number {
+  calculatePoints(wasteTypes: string | string[], estimatedWeight: number, actualWeight?: number): number {
     const wastePoints: { [key: string]: number } = {
       'plastique': 2,
       'verre': 1,
@@ -99,26 +99,32 @@ export class IndexedDbService {
       'métal': 5
     };
 
+    const wasteTypeArray = Array.isArray(wasteTypes) ? wasteTypes : [wasteTypes];
+
     let totalPoints = 0;
-    wasteTypes.forEach(type => {
-      if (wastePoints[type]) {
-        totalPoints += wastePoints[type] * (actualWeight / 1000);  // Conversion des grammes en kilogrammes
+    const weightToUse = actualWeight || estimatedWeight;
+
+    if (!weightToUse || weightToUse <= 0) {
+      console.log('Poids invalide:', weightToUse);
+      return 0;
+    }
+
+    const weightInKg = weightToUse / 1000;
+
+    wasteTypeArray.forEach(type => {
+      const normalizedType = type.toLowerCase();
+      if (wastePoints[normalizedType]) {
+        totalPoints += wastePoints[normalizedType] * weightInKg;
+      } else {
+        console.log(`Type de déchet inconnu : ${type}`);
       }
     });
 
-    if (wasteTypes.length > 1) {
-      totalPoints /= wasteTypes.length;
-    }
-
-    const weightDifference = Math.abs(estimatedWeight - actualWeight);
-    totalPoints -= weightDifference / 10;
-
-    if (totalPoints < 0) {
-      totalPoints = 0;
-    }
-
-    return totalPoints;
+    console.log('Points calculés:', totalPoints);
+    return Math.max(0, Math.floor(totalPoints));
   }
+
+
 
   async updateUser(user: any) {
     const db = await this.getDB();
@@ -138,20 +144,32 @@ export class IndexedDbService {
 
   async updateCollectorPoints(collectorId: string, points: number) {
     const db = await this.getDB();
+
+    // Récupérer le collecteur dans la base de données
     const collector = await db.get('users', collectorId);
 
-    if (!collector || collector.role !== 'collector') {
-      console.error('Collecteur non trouvé ou rôle incorrect');
+    const updatedCollector = await db.get('users', collectorId);
+console.log('Collecteur mis à jour :', updatedCollector);
+
+    if (!collector) {
+      console.error('Collecteur non trouvé dans la base de données');
       return;
     }
+    console.log('Points convertibles avant attribution des bons :', collector.convertiblePoints);
+
 
     collector.convertiblePoints = collector.convertiblePoints || 0;
+
+
     collector.convertiblePoints += points;
+    console.log('Points convertibles mis à jour :', collector.convertiblePoints);
+
+    console.log('Les points ajoutés :', points);
 
     let voucher = '';
     if (collector.convertiblePoints >= 500) {
       voucher = '350 Dh';
-      collector.convertiblePoints -= 500;  
+      collector.convertiblePoints -= 500;
     } else if (collector.convertiblePoints >= 200) {
       voucher = '120 Dh';
       collector.convertiblePoints -= 200;
@@ -164,21 +182,32 @@ export class IndexedDbService {
 
     if (voucher) {
       console.log(`Bon d'achat attribué : ${voucher}`);
+    } else {
+      console.log('Aucun bon d\'achat attribué, points restants :', collector.convertiblePoints);
     }
   }
-
 
   async updateCollectRequest(id: number, data: Partial<MyDB['collectRequests']['value']>) {
     const db = await this.getDB();
     const existingRequest = await db.get('collectRequests', id);
+
     if (!existingRequest) {
       console.error(`Impossible de mettre à jour : la requête avec l'ID ${id} n'existe pas.`);
       return;
     }
 
     const updatedRequest = { ...existingRequest, ...data };
-    return db.put('collectRequests', updatedRequest);
+
+    updatedRequest.points = this.calculatePoints(
+      updatedRequest.wasteTypes,
+      updatedRequest.estimatedWeight,
+      updatedRequest.actualWeight
+    );
+
+    await db.put('collectRequests', updatedRequest);
   }
+
+
 
   async deleteCollectRequest(id: number) {
     const db = await this.getDB();
@@ -205,7 +234,7 @@ export class IndexedDbService {
 
     for (const request of allRequests) {
       if (!request.wasteTypes || !Array.isArray(request.wasteTypes)) {
-        request.wasteTypes = [];
+        request.wasteTypes;
         await db.put('collectRequests', request);
       }
     }
@@ -238,9 +267,11 @@ export class IndexedDbService {
 
     for (const request of allRequests) {
       if (!request.wasteTypes || !Array.isArray(request.wasteTypes)) {
-        request.wasteTypes = [];
-        await db.put('collectRequests', request);
+        request.wasteTypes = [request.wasteTypes];
       }
+      request.wasteTypes = request.wasteTypes.map(type => type.toLowerCase());
+      await db.put('collectRequests', request);
     }
   }
+
 }

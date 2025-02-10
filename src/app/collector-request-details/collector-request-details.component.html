@@ -8,7 +8,7 @@
     <div *ngIf="request" class="request-details">
       <p>
         <strong>Types de déchets :</strong>
-        {{ request.wasteTypes ? request.wasteTypes.join(", ") : "Non spécifié" }}
+        {{ request.wasteTypes ? request.wasteTypes: "Non spécifié" }}
       </p>
       <p><strong>Poids estimé :</strong> {{ request.estimatedWeight }}g</p>
       <p><strong>Adresse :</strong> {{ request.address }}</p>

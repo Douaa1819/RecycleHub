@@ -15,9 +15,9 @@
       </div>
       <div class="card-body">
         <p>
-          <strong>Types de déchets :</strong>
+          <strong>Type de déchet :</strong>
           {{
-            request.wasteTypes ? request.wasteTypes.join(", ") : "Non spécifié"
+            request.wasteTypes ? request.wasteTypes : "Non spécifié"
           }}
         </p>
         <p><strong>Poids estimé :</strong> {{ request.estimatedWeight }}g</p>

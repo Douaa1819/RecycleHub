@@ -29,6 +29,7 @@ export class CollectRequestComponent {
     'Tétouan',
     'Essaouira'
   ];
+  wasteTypes: string[] = ['Plastique', 'Verre', 'Papier', 'Métal'];
 
   constructor(
     private fb: FormBuilder,
@@ -36,7 +37,7 @@ export class CollectRequestComponent {
     private router: Router
   ) {
     this.collectRequestForm = this.fb.group({
-      wasteTypes: [[], [Validators.required, Validators.minLength(1)]],
+      wasteTypes: ['', Validators.required],
       photos: [null],
       estimatedWeight: ['', [Validators.required, Validators.min(1000)]],
       address: ['', Validators.required],
