@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IndexedDbService } from './indexed-db.service';
+import { from, Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root',
@@ -7,10 +9,11 @@ import { IndexedDbService } from './indexed-db.service';
 export class UserService {
   constructor(private indexedDbService: IndexedDbService) {}
 
-  async addUser(user: any) {
-    const db = await this.indexedDbService.getDB();
-    user.role = user.role || 'particulier';
-    return db.add('users', user);
+  addUser(user: any): Observable<any> {
+    return from(this.indexedDbService.getDB().then(db => {
+      user.role = user.role || 'particulier';
+      return db.add('users', user);
+    }));
   }
 
   async getUser(email: string) {
@@ -23,13 +26,9 @@ export class UserService {
     return db.put('users', user);
   }
 
-  async deleteUser(email: string) {
-    const db = await this.indexedDbService.getDB();
-    return db.delete('users', email);
+
+  deleteUser(email: string): Observable<any> {
+    return from(this.indexedDbService.getDB().then(db => db.delete('users', email)));
   }
-
-
-  
-
 
 }

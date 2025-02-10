@@ -60,18 +60,21 @@ private userService :UserService ,
     }
   }
 
-  async deleteAccount() {
+  deleteAccount() {
     if (confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')) {
-      try {
-        await this.userService.deleteUser(this.currentUser.email);
-        localStorage.removeItem('currentUser');
-        this.router.navigate(['/login']);
-      } catch (error) {
-        console.error('Erreur lors de la suppression du compte :', error);
-        this.errorMessage = 'Une erreur est survenue lors de la suppression du compte.';
-      }
+      this.userService.deleteUser(this.currentUser.email).subscribe({
+        next: () => {
+          localStorage.removeItem('currentUser');
+          this.router.navigate(['/login']);
+        },
+        error: (error) => {
+          console.error('Erreur lors de la suppression du compte :', error);
+          this.errorMessage = 'Une erreur est survenue lors de la suppression du compte.';
+        }
+      });
     }
   }
+
 
   onFileChange(event: any) {
     const file = event.target.files[0];

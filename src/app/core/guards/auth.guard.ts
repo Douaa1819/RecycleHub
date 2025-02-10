@@ -10,10 +10,10 @@ export class AuthGuard implements CanActivate {
   canActivate(): boolean {
     const currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
-      return true; // Autoriser l'accès si l'utilisateur est connecté
+      return true;
     } else {
-      this.router.navigate(['/login']); // Rediriger vers la page de connexion
-      return false; // Bloquer l'accès
+      this.router.navigate(['/login']);
+      return false;
     }
   }
 }
