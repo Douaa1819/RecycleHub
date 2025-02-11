@@ -1,0 +1,115 @@
+<div class="container">
+  <h2>Demande de Collecte</h2>
+  <form [formGroup]="collectRequestForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <div class="form-group">
+        <div class="waste-type-container">
+          <div class="waste-type-option" *ngFor="let type of wasteTypes">
+            <input
+              type="radio"
+              [value]="type"
+              formControlName="wasteTypes"
+              class="waste-type-input"
+              id="{{ type }}"
+            />
+            <label [for]="type" class="waste-type-label">{{ type }}</label>
+          </div>
+        </div>
+        <div
+          *ngIf="
+            collectRequestForm.get('wasteTypes')?.invalid &&
+            collectRequestForm.get('wasteTypes')?.touched
+          "
+        >
+          <small class="error">Veuillez sélectionner un type de déchet.</small>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="photos">Photos des déchets (optionnel)</label>
+      <input id="photos" type="file" (change)="onFileChange($event)" />
+    </div>
+    <div class="form-group">
+      <label for="estimatedWeight">Poids estimé (en grammes)</label>
+      <input
+        id="estimatedWeight"
+        type="number"
+        formControlName="estimatedWeight"
+      />
+      <div
+        *ngIf="
+          collectRequestForm.get('estimatedWeight')?.invalid &&
+          collectRequestForm.get('estimatedWeight')?.touched
+        "
+      >
+        <small class="error">Le poids doit être d’au moins 1000g.</small>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="address">Adresse de collecte</label>
+      <input id="address" type="text" formControlName="address" />
+      <div
+        *ngIf="
+          collectRequestForm.get('address')?.invalid &&
+          collectRequestForm.get('address')?.touched
+        "
+      >
+        <small class="error">Ce champ est obligatoire.</small>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="city" class="form-label">Ville</label>
+      <select id="city" formControlName="city" class="form-input" required>
+        <option value="" disabled selected>Choisissez votre ville</option>
+        <option *ngFor="let city of city" [value]="city">{{ city }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="date">Date de collecte</label>
+      <input
+        id="date"
+        type="date"
+        formControlName="date"
+      />
+      <div *ngIf="collectRequestForm.get('date')?.errors?.['pastDate']">
+        <small class="error">La date doit être dans le futur.</small>
+      </div>
+      <div *ngIf="collectRequestForm.get('date')?.invalid && collectRequestForm.get('date')?.touched">
+        <small class="error">Ce champ est obligatoire.</small>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="timeSlot">Créneau horaire (09h00 - 18h00)</label>
+      <input
+        id="timeSlot"
+        type="time"
+        formControlName="timeSlot"
+        min="09:00"
+        max="18:00"
+      />
+      <div
+        *ngIf="
+          collectRequestForm.get('timeSlot')?.invalid &&
+          collectRequestForm.get('timeSlot')?.touched
+        "
+      >
+        <small class="error"
+          >Le créneau horaire doit être entre 09h00 et 18h00.</small
+        >
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="notes">Notes supplémentaires (optionnel)</label>
+      <textarea id="notes" formControlName="notes"></textarea>
+    </div>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <button
+      type="submit"
+      class="btn"
+      [disabled]="collectRequestForm.invalid || isSubmitting"
+    >
+      {{ isSubmitting ? "Envoi en cours..." : "Soumettre" }}
+    </button>
+  </form>
+</div>
+s

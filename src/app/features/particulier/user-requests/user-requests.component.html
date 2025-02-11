@@ -1,0 +1,49 @@
+
+
+  <div class="container">
+    <h2>Mes Demandes de Collecte</h2>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <div class="requests-grid">
+      <div class="request-card" *ngFor="let request of requests">
+        <div class="request-detail">
+          <span class="request-detail-label">Type de déchets</span>
+          <span class="request-detail-value">{{ request.wasteTypes }}</span>
+        </div>
+        <div class="request-detail">
+          <span class="request-detail-label">Poids estimé</span>
+          <span class="request-detail-value">{{ request.estimatedWeight }} g</span>
+        </div>
+        <div class="request-detail">
+          <span class="request-detail-label">Adresse</span>
+          <span class="request-detail-value">{{ request.address }}</span>
+        </div>
+        <div class="request-detail">
+          <span class="request-detail-label">Date</span>
+          <span class="request-detail-value">{{ request.date }}</span>
+        </div>
+        <div class="request-detail">
+          <span class="request-detail-label">Créneau horaire</span>
+          <span class="request-detail-value">{{ request.timeSlot }}</span>
+        </div>
+        <div class="request-detail">
+          <span class="request-detail-label">Statut</span>
+          <span class="status-badge" [ngClass]="'status-' + request.status.toLowerCase().replace(' ', '-')">
+            {{ request.status }}
+          </span>
+        </div>
+
+        <div class="request-actions" *ngIf="request.status === 'En attente'">
+          <button class="btn btn-modifier" (click)="editRequest(request.id)">Modifier</button>
+          <button class="btn btn-supprimer" (click)="deleteRequest(request.id)">Supprimer</button>
+        </div>
+      </div>
+    </div>
+
+    <p *ngIf="requests.length === 0" class="no-requests">
+      Aucune demande de collecte trouvée.
+    </p>
+  </div>

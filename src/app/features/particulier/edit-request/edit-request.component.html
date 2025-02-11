@@ -1,0 +1,102 @@
+<div class="container">
+  <h2>Modifier la Demande de Collecte</h2>
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Type de déchet</label>
+        <div class="waste-type-container">
+          <div class="waste-type-option" *ngFor="let type of wasteTypes">
+            <input
+              type="radio"
+              [value]="type"
+              formControlName="wasteTypes"
+              class="waste-type-input"
+              id="{{ type }}"
+            />
+            <label [for]="type" class="waste-type-label">{{ type }}</label>
+          </div>
+        </div>
+        <div *ngIf="editForm.get('wasteTypes')?.invalid && editForm.get('wasteTypes')?.touched">
+          <small class="error">Veuillez sélectionner un type de déchet.</small>
+        </div>
+    </div>
+
+    <div class="form-group">
+      <label for="photos">Photos des déchets (optionnel)</label>
+      <input
+        id="photos"
+        type="file"
+        (change)="onFileChange($event)"
+      />
+      <div *ngIf="editForm.value.photos">
+        <img [src]="editForm.value.photos" alt="Photo des déchets" style="max-width: 100px; margin-top: 10px;" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="estimatedWeight">Poids estimé (en grammes)</label>
+      <input
+        id="estimatedWeight"
+        type="number"
+        formControlName="estimatedWeight"
+      />
+      <div *ngIf="editForm.get('estimatedWeight')?.invalid && editForm.get('estimatedWeight')?.touched">
+        <small class="error">Le poids doit être d’au moins 1000g.</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="address">Adresse de collecte</label>
+      <input
+        id="address"
+        type="text"
+        formControlName="address"
+      />
+      <div *ngIf="editForm.get('address')?.invalid && editForm.get('address')?.touched">
+        <small class="error">Ce champ est obligatoire.</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="date">Date de collecte</label>
+      <input
+        id="date"
+        type="date"
+        formControlName="date"
+      />
+      <div *ngIf="editForm.get('date')?.errors?.['pastDate']"> 
+        <small class="error">La date doit être dans le futur.</small>
+      </div>
+      <div *ngIf="editForm.get('date')?.invalid && editForm.get('date')?.touched">
+        <small class="error">Ce champ est obligatoire.</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="timeSlot">Créneau horaire (09h00 - 18h00)</label>
+      <input
+        id="timeSlot"
+        type="time"
+        formControlName="timeSlot"
+        min="09:00"
+        max="18:00"
+      />
+      <div *ngIf="editForm.get('timeSlot')?.invalid && editForm.get('timeSlot')?.touched">
+        <small class="error">Le créneau horaire doit être entre 09h00 et 18h00.</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="notes">Notes supplémentaires (optionnel)</label>
+      <textarea
+        id="notes"
+        formControlName="notes"
+      ></textarea>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <button type="submit" [disabled]="editForm.invalid">Mettre à jour</button>
+  </form>
+</div>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecycleHub - Recyclez et gagnez des récompenses</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">RecycleHub</div>
+        <div class="nav-buttons">
+          <a (click)="navigateToLogin()" class="button button-secondary">Se connecter</a>
+          <a (click)="navigateToRegister()" class="button button-primary">S'inscrire</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Recyclez facilement, gagnez des récompenses</h1>
+        <p>Contribuez à un avenir plus vert avec des collecteurs agréés et des avantages pour chaque recyclage.</p>
+        <a href="#" class="button button-primary">Commencer maintenant</a>
+    </section>
+
+    <section class="features">
+        <div class="feature">
+            <i class="fas fa-calendar-check"></i>
+            <h3>Collecte planifiée</h3>
+            <p>Choisissez un créneau horaire adapté à votre emploi du temps entre 9h et 18h.</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-truck"></i>
+            <h3>Collecteurs certifiés</h3>
+            <p>Des collecteurs professionnels et certifiés, pour un service fiable et de qualité.</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-coins"></i>
+            <h3>Système de points</h3>
+            <p>Gagnez des points à chaque collecte et échangez-les contre des récompenses.</p>
+        </div>
+    </section>
+
+    <section class="cta">
+        <h2>Prêt à faire la différence ?</h2>
+        <div class="cta-buttons">
+           <a (click)="navigateToRegister()" class="button button-primary">S'inscrire gratuitement</a>
+            <a href="#" class="button button-secondary">En savoir plus</a>
+        </div>
+    </section>
+</body>
+</html>
