@@ -1,4 +1,4 @@
-# RecycleHub
+# ♻️ RecycleHub
 
 ## 📌 Description
 **RecycleHub** est une application de gestion de recyclage qui met en relation des particuliers et des collecteurs agréés pour automatiser le processus de collecte des déchets. L'application est développée en tant que **Single Page Application (SPA)** utilisant **Angular 17+**, avec **IndexedDB** pour la persistance des données.
