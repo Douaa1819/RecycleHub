@@ -82,7 +82,7 @@ RecycleHub/
 ## 🔧 Installation & Lancement
 1. **Cloner le projet** :
    ```sh
-   git clone https://github.com/votre-repo/RecycleHub.git
+   git clone https://github.com/Douaa1819/RecycleHub.git
    cd RecycleHub
    ```
 2. **Installer les dépendances** :
